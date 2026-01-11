@@ -2,7 +2,6 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
 import os
 
-
 class QdrantStorage:
     def __init__(self, url=os.getenv('VECTOR_DB_URL'), collection=os.getenv('VECTOR_DB_COLLECTION_NAME'), dim=os.getenv('VECTOR_DB_DIM')):
         self.client = QdrantClient(url=url, timeout=30)
@@ -25,7 +24,6 @@ class QdrantStorage:
             with_payload=True,
             limit=top_k
         )
-
         contexts = []
         sources = set()
 
