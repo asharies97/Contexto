@@ -1,0 +1,51 @@
+services:
+  # --- Vector Database ---
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant-db
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    networks:
+      - rag-network
+
+  # --- FastAPI Application ---
+  api:
+    build: .
+    container_name: fastapi-api
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - INNGEST_BASE_URL=http://inngest:8288
+      - INNGEST_DEV=1
+    depends_on:
+      - qdrant
+    networks:
+      - rag-network
+
+  # --- Inngest Dev Server ---
+  inngest:
+    image: inngest/inngest:latest
+    container_name: inngest-server
+    ports:
+      - "8288:8288"
+    command: [
+      "inngest", "dev",
+      "-u", "http://api:8000/api/inngest",
+      "--no-discovery"
+    ]
+    depends_on:
+      api:
+        condition: service_started
+    networks:
+      - rag-network
+
+networks:
+  rag-network:
+    driver: bridge
+
+volumes:
+  qdrant_storage:
