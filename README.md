@@ -40,7 +40,7 @@ Start the application and its dependencies (Qdrant, Inngest Dev Server, and the 
 
 Bash
 <pre>
-  docker-compose up -d
+  docker compose up
 </pre>
 
 **3. Monitor Workflows**
