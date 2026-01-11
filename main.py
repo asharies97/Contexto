@@ -13,6 +13,20 @@ from custom_types import RAGQueryResults, RAGSearchResult, RAGUpsertResult, RAGC
 
 load_dotenv()
 
+def getAdapter():
+    if os.getenv("AIPROVIDER")=="GEMINI":
+        return ai.openai.Adapter(
+            auth_key=os.getenv("GEMINI_API_KEY"),
+            base_url=os.getenv("BASEURL"),
+            model=os.getenv("AIMODEL")
+            )
+    else :
+        return ai.openai.Adapter(
+            auth_key=os.getenv("OPENAI_API_KEY"),
+            model=os.getenv("AIMODEL")
+            )
+
+
 inngest_client=inngest.Inngest(
     app_id='rag_app',
     logger=logging.getLogger("uvicorn"),
@@ -74,10 +88,7 @@ async def rag_query_pdf_ai(ctx: inngest.Context):
         f"Question: {question}\n\n"
         "Answer concisely using the context above."
     )
-    adapter=ai.openai.Adapter(
-        auth_key=os.getenv("OPENAI_API_KEY"),
-        model="gpt-4o-mini"
-    )
+    adapter=getAdapter()
 
     res=await ctx.step.ai.infer(
         "llm-answer",

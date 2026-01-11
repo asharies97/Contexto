@@ -1,13 +1,9 @@
 import os
-from openai import OpenAI
+from inngest.experimental import ai
 
-# The client automatically uses the OPENAI_API_KEY environment variable
-# or you can set it directly: client = OpenAI(api_key="YOUR_API_KEY")
-client = OpenAI()
-
-models_list = client.models.list()
-available_models = sorted([model.id for model in models_list])
-
-print("Available models:")
-for model in available_models:
-    print(f"- {model}")
+print(ai.openai.Adapter(
+    auth_key=os.getenv("GEMINI_API_KEY"),
+    # Point to Google's OpenAI-compatible base URL
+    base_url="https://generativelanguage.googleapis.com/v1beta/",
+    model="gemini-1.5-flash"
+))
