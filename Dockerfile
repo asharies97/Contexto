@@ -13,16 +13,15 @@ ENV PATH="/root/.local/bin/:$PATH"
 WORKDIR /app
 COPY . .
 
-# 3. CRITICAL: Set PYTHONPATH so Python finds 'functions.py' in /app
 ENV PYTHONPATH=/app
 ENV UV_PROJECT_ENVIRONMENT=/app/.venv
 ENV UV_COMPILE_BYTECODE=1
 
-# 4. Copy lockfiles and sync
+# 4 lockfiles and sync
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev
 
-# 5. Copy your application code
+# Copy app
 COPY . .
 
 # 6. Final command

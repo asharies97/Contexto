@@ -1,5 +1,5 @@
 services:
-  # --- Vector Database ---
+  #Vector Db
   qdrant:
     image: qdrant/qdrant:latest
     container_name: qdrant-db
@@ -10,7 +10,7 @@ services:
     networks:
       - rag-network
 
-  # --- FastAPI Application ---
+  # FastAPI
   api:
     build: .
     container_name: fastapi-api
@@ -26,7 +26,7 @@ services:
     networks:
       - rag-network
 
-  # --- Inngest Dev Server ---
+  #Inngest Dev Server ---
   inngest:
     image: inngest/inngest:latest
     container_name: inngest-server
